@@ -28,6 +28,11 @@ O tunnel-vision é uma aplicação em Python com Django projetada monitorar ativ
 
 TBD
 
+## Fontes e Recursos utilizados:
+[w3schools](https://www.w3schools.com/django/django_models.php)
+[Python Invest](https://pythoninvest.com/long-read/exploring-finance-apis)
+[PyPI](https://pypi.org/project/yfinance/)
+
 ---
 Clone o repositório:
 
