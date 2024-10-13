@@ -30,9 +30,12 @@ TBD
 
 ## Fontes e Recursos utilizados:
 [w3schools](https://www.w3schools.com/django/django_models.php)
+
 [Python Invest](https://pythoninvest.com/long-read/exploring-finance-apis)
+
 [PyPI](https://pypi.org/project/yfinance/)
 
+[Django Documentation: Models](https://docs.djangoproject.com/en/4.2/topics/db/models/)
 ---
 Clone o repositório:
 
