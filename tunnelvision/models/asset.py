@@ -6,6 +6,9 @@ class Asset(models.Model):
 
 class MonitoringConfig(models.Model):
     asset = models.ForeignKey(Asset, on_delete=models.CASCADE)
+    
+    recipientMail = models.EmailField()  # E-mail do destinatário
+    senderMail = models.EmailField()     # E-mail do remetente
 
     lower_bound = models.DecimalField(max_digits=10, decimal_places=2)
     upper_bound = models.DecimalField(max_digits=10, decimal_places=2)
