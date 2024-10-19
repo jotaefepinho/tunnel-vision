@@ -26,7 +26,42 @@ O tunnel-vision é uma aplicação em Python com Django projetada monitorar ativ
 
 ## Como Executar o Projeto
 
-TBD
+
+---
+Clone o repositório:
+
+```bash
+git clone https://github.com/jotaefepinho/tunnel-vision.git
+cd tunnel-vision
+```
+
+No final do arquivo [settings.py](settings.py), insira seus dados de email:
+```python
+EMAIL_HOST = 'smtp.server.com'  # Substitua pelo seu servidor SMTP
+EMAIL_HOST_USER = 'youremail@server.com'  # Seu e-mail
+EMAIL_HOST_PASSWORD = 'yourpassword'  # Sua senha
+```
+
+Remova banco de dados e recompile o servidor:
+```bash
+rm db.sqlite3
+python3 manage.py makemigrations
+python3 manage.py migrate
+```
+
+Inicie o servidor:
+```bash
+python3 manage.py runserver
+```
+
+Em outro terminal, inicie o envio de emails periódicos:
+```bash
+python3 manage.py check_prices
+```
+
+Acesse http://127.0.0.1:8000/ ou localhost:8000 no seu navegador, e seja redirecionado para o monitor de ativos.
+
+Insira os ativos a serem monitorados, e aguarde os avisos.
 
 ## Fontes e Recursos utilizados:
 [w3schools](https://www.w3schools.com/django/django_models.php)
@@ -36,9 +71,3 @@ TBD
 [PyPI](https://pypi.org/project/yfinance/)
 
 [Django Documentation: Models](https://docs.djangoproject.com/en/4.2/topics/db/models/)
----
-Clone o repositório:
-
-```bash
-git clone https://github.com/jotaefepinho/tunnel-vision.git
-cd tunnel-vision

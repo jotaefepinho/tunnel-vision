@@ -14,6 +14,19 @@ def monitor_view(request):
         recipient_mail = request.POST['recipientMail']
         frequency = request.POST['frequency']
 
+        # Validar e converter limites de preço
+        try:
+            lower_bound = Decimal(lower_bound)
+            upper_bound = Decimal(upper_bound)
+        except InvalidOperation:
+            return redirect('monitor')
+        
+        # Validar periodicidade
+        try:
+            frequency = int(frequency)
+        except ValueError:
+            error = "A periodicidade deve ser um número inteiro."
+        
         # Criar ou buscar o ativo
         asset, created = Asset.objects.get_or_create(symbol=symbol)
 
@@ -23,27 +36,34 @@ def monitor_view(request):
             recipientMail=recipient_mail,
             lower_bound=lower_bound,
             upper_bound=upper_bound,
-            frequency=frequency
+            frequency=int(frequency)  # Certifique-se de que seja um número inteiro
         )
 
         return redirect('monitor')  # Redireciona para a página de monitoramento
 
-    assets = Asset.objects.all()
+    # Carregar configurações de monitoramento
+    monitoring_configs = MonitoringConfig.objects.select_related('asset').all()
+
+    # Preparar os dados dos ativos
     asset_data = [
         {
-            'id': asset.id,  # Certifique-se de incluir o id aqui
-            'symbol': asset.symbol,
-            'price': asset.get_B3_quote()
+            'id': config.asset.id,
+            'symbol': config.asset.symbol,
+            'price': config.asset.get_B3_quote(),
+            'frequency': config.frequency  # Usa a periodicidade da configuração de monitoramento
         }
-        for asset in assets
+        for config in monitoring_configs
     ]
 
-    print([asset.id for asset in assets])
-    
+    # Renderizar a página com os dados dos ativos
     return render(request, 'monitor.html', {'assets': asset_data})
 
 
 def remove_asset(request, asset_id):
-    asset = get_object_or_404(Asset, id=asset_id)
-    asset.delete()
+    # Procurar a configuração de monitoramento associada ao ativo
+    monitoring_config = get_object_or_404(MonitoringConfig, asset_id=asset_id)
+
+    # Excluir a configuração de monitoramento (não o ativo)
+    monitoring_config.delete()
+
     return redirect('monitor')
