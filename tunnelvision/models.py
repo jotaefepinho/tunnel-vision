@@ -1,6 +1,7 @@
 # models.py
 from django.db import models
 import yfinance as yf
+from decimal import Decimal
 
 class Asset(models.Model):
     symbol = models.CharField(max_length=10, unique=True)
@@ -24,3 +25,8 @@ class MonitoringConfig(models.Model):
     upper_bound = models.DecimalField(max_digits=10, decimal_places=2)
     
     frequency = models.IntegerField(default=60)
+
+class PriceHistory(models.Model):
+    asset = models.ForeignKey(Asset, on_delete=models.CASCADE)
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+    timestamp = models.DateTimeField(auto_now_add=True)

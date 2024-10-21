@@ -172,6 +172,16 @@
                         </form>
                     </td>
                 </tr>
+                <tr>
+                    <td colspan="4">
+                        <strong>Histórico de Preços:</strong>
+                        <ul>
+                            {% for price in asset.price_history %}
+                                <li>{{ price.timestamp|date:"d/m/Y H:i" }} - {{ price.price }}</li>
+                            {% endfor %}
+                        </ul>
+                    </td>
+                </tr>
             {% endfor %}
         </tbody>
     </table>

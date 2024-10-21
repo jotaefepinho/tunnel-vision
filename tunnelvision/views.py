@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from tunnelvision.models import Asset, MonitoringConfig
+from tunnelvision.models import Asset, MonitoringConfig, PriceHistory
 from decimal import Decimal, InvalidOperation
 
 def index_view(request):
@@ -39,6 +39,10 @@ def monitor_view(request):
             frequency=int(frequency)  # Certifique-se de que seja um número inteiro
         )
 
+        # Salvar o preço atual no histórico de preços
+        current_price = asset.get_B3_quote()
+        PriceHistory.objects.create(asset=asset, price=current_price)
+        
         return redirect('monitor')  # Redireciona para a página de monitoramento
 
     # Carregar configurações de monitoramento
@@ -50,7 +54,8 @@ def monitor_view(request):
             'id': config.asset.id,
             'symbol': config.asset.symbol,
             'price': config.asset.get_B3_quote(),
-            'frequency': config.frequency  # Usa a periodicidade da configuração de monitoramento
+            'frequency': config.frequency,  # Usa a periodicidade da configuração de monitoramento
+            'price_history': PriceHistory.objects.filter(asset=config.asset).order_by('-timestamp')
         }
         for config in monitoring_configs
     ]
@@ -60,10 +65,10 @@ def monitor_view(request):
 
 
 def remove_asset(request, asset_id):
-    # Procurar a configuração de monitoramento associada ao ativo
-    monitoring_config = get_object_or_404(MonitoringConfig, asset_id=asset_id)
+    # Procurar a os monitoramentos do ativo
+    monitoring_configs = MonitoringConfig.objects.filter(asset_id=asset_id)
 
-    # Excluir a configuração de monitoramento (não o ativo)
-    monitoring_config.delete()
+    # Excluir todas as configurações de monitoramento do ativo
+    monitoring_configs.delete()
 
     return redirect('monitor')

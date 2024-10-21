@@ -1,7 +1,7 @@
 import time
 from datetime import datetime, timedelta
 from django.core.management.base import BaseCommand
-from tunnelvision.models import MonitoringConfig
+from tunnelvision.models import MonitoringConfig, PriceHistory
 from tunnelvision.utils import send_alert_email
 
 class Command(BaseCommand):
@@ -28,6 +28,11 @@ class Command(BaseCommand):
                     
                     # Obtenção do preço atual do ativo
                     current_price = config.asset.get_B3_quote()
+                    
+                    PriceHistory.objects.create(
+                        asset=config.asset,
+                        price=current_price
+                    )
 
                     if current_price is None:
                         continue
