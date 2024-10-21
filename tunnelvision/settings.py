@@ -130,3 +130,6 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'youremail@server.com'  # Seu e-mail
 EMAIL_HOST_PASSWORD = 'yourpassword'  # Sua senha
+
+TIME_ZONE = 'America/Sao_Paulo'
+USE_TZ = True
